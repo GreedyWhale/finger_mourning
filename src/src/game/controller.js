@@ -18,9 +18,6 @@ class GameController {
     }
     this.gameView.initGamePage(gamePageCallbacks)
     this.gameView.initGameOverPage(gameOverPageCallbacks)
-    setTimeout(() => {
-      this.gameModel.setStage('game')
-    }, 2000)
   }
   initListeners () {
     eventBus.on(GAME_STAGE_CHANGED, (stage) => {

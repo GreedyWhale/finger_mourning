@@ -1,58 +1,53 @@
-/* global GameGlobal */
+import { scene } from '../scene/index'
+import Cuboid from '../block/cuboid'
+import Cylinder from '../block/cylinder'
+import ground from '../objects/ground'
+import bottle from '../objects/bottle'
 export default class GamePage {
   constructor (callbacks) {
     this.callbacks = callbacks
   }
   init () {
-    const width = window.innerWidth
-    const height = window.innerHeight
-    const renderer = new GameGlobal.THREE.WebGLRenderer({
-      // eslint-disable-next-line no-undef
-      canvas
-    })
-
-    const scene = new GameGlobal.THREE.Scene()
-
-    const camera = new GameGlobal.THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, -1000, 1000)
-
-    renderer.setClearColor(new GameGlobal.THREE.Color('rgb(0, 0, 0)'))
-    renderer.setSize(width, height)
-
-    const triangleShape = new GameGlobal.THREE.Shape()
-    triangleShape.moveTo(0, 100)
-    triangleShape.lineTo(-100, -100)
-    triangleShape.lineTo(100, -100)
-    triangleShape.lineTo(0, 100)
-
-    const geometry = new GameGlobal.THREE.ShapeGeometry(triangleShape)
-    const material = new GameGlobal.THREE.MeshBasicMaterial({
-      color: new GameGlobal.THREE.Color('rgb(0, 255, 0)'),
-      side: GameGlobal.THREE.DoubleSide
-    })
-
-    const mesh = new GameGlobal.THREE.Mesh(geometry, material)
-    this.mesh = mesh
-    mesh.position.set(0, 0, 1)
-    mesh.visible = false
-    scene.add(mesh)
-
-    camera.position.set(0, 0, 0)
-    camera.lookAt(new GameGlobal.THREE.Vector3(0, 0, 1))
-    const render = () => {
-      mesh.rotateY(0.05)
-      renderer.render(scene, camera)
-      // requestAnimationFrame(render)
+    this.scene = scene
+    this.ground = ground
+    this.bottle = bottle
+    this.scene.init()
+    this.ground.init()
+    this.bottle.init()
+    this.addInitBlock()
+    this.addGround()
+    this.addBottle()
+    this.render()
+  }
+  render () {
+    if (this.bottle) {
+      this.bottle.update()
     }
-
-    render()
+    this.scene.render()
+    requestAnimationFrame(() => {
+      this.render()
+    })
+  }
+  addInitBlock () {
+    const cuboidBlock = new Cuboid(-15, 0, 0)
+    const cylinderBlock = new Cylinder(20, 0, 0)
+    this.scene.instance.add(cuboidBlock.instance)
+    this.scene.instance.add(cylinderBlock.instance)
   }
   restart () {
     console.log('game page restart')
   }
   show () {
-    this.mesh.visible = true
+    // this.mesh.visible = true
   }
   hide () {
-    this.mesh.visible = false
+    // this.mesh.visible = false
+  }
+  addGround () {
+    this.scene.instance.add(this.ground.instance)
+  }
+  addBottle () {
+    this.scene.instance.add(this.bottle.instance)
+    this.bottle.showUp()
   }
 }

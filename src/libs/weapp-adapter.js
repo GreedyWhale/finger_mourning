@@ -743,7 +743,10 @@
 	    }
 
 	    return new _HTMLElement2.default(tagName);
-	  },
+		},
+		createElementNS: function createElementNS(nameSpace, tagName) {
+			return this.createElement(tagName)
+		},
 	  getElementById: function getElementById(id) {
 	    if (id === window.canvas.id) {
 	      return window.canvas;
