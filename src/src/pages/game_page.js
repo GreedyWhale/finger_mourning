@@ -17,6 +17,7 @@ export default class GamePage {
     this.addInitBlock()
     this.addGround()
     this.addBottle()
+    this.bindTouchEvent()
     this.render()
   }
   render () {
@@ -49,5 +50,13 @@ export default class GamePage {
   addBottle () {
     this.scene.instance.add(this.bottle.instance)
     this.bottle.showUp()
+  }
+  bindTouchEvent () {
+    wx.onTouchStart(() => {
+      this.bottle.rotate()
+    })
+    wx.onTouchEnd(() => {
+      
+    })
   }
 }

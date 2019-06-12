@@ -6,7 +6,9 @@
     "extends": "standard",
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "wx": true,
+        "GameGlobal": true
     },
     "parserOptions": {
         "ecmaVersion": 2018,

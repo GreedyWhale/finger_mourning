@@ -1,4 +1,3 @@
-/* global GameGlobal */
 import BaseBlock from './base'
 
 export default class cylinder extends BaseBlock {

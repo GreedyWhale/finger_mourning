@@ -1,4 +1,3 @@
-/* global GameGlobal */
 import sceneConfig from '../../configs/scene_config'
 
 class Background {

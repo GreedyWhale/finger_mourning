@@ -1,4 +1,3 @@
-/* global GameGlobal */
 import bottleConfig from '../../configs/bottle_config'
 import blockConfig from '../../configs/block_config'
 import animation from '../utils/animation'
@@ -6,6 +5,8 @@ import animation from '../utils/animation'
 class Bottle {
   constructor () {
     this.instance = null
+    this.direction = 0
+    this.axis = null
   }
   init () {
     this.instance = new GameGlobal.THREE.Object3D()
@@ -41,15 +42,15 @@ class Bottle {
       new GameGlobal.THREE.MeshBasicMaterial({ map: bottomTexture })
     )
     middle.bottom = true
-    const body = new GameGlobal.THREE.Object3D()
+    this.body = new GameGlobal.THREE.Object3D()
     this.head.position.y = 3.57143 * radius
     top.position.y = 1.8143 * radius
     middle.position.y = 1.3857 * radius
-    body.add(top)
-    body.add(middle)
-    body.add(bottom)
+    this.body.add(top)
+    this.body.add(middle)
+    this.body.add(bottom)
     this.human.add(this.head)
-    this.human.add(body)
+    this.human.add(this.body)
     this.bottle.add(this.human)
     this.bottle.position.y = 2.1
     this.instance.add(this.bottle)
@@ -72,6 +73,53 @@ class Bottle {
     }, 1, 'bounceEaseOut', ({ x, y, z }) => {
       this.instance.position.set(x, y, z)
     })
+  }
+
+  setDirection (direction, axis) {
+    this.direction = direction
+    this.axis = axis
+  }
+
+  rotate () {
+    const scale = 1.4
+    this.human.rotation.z = this.human.rotation.x = 0
+    if (this.direction === 0) { // x
+      animation(this.human.rotation, { z: this.human.rotation.z - Math.PI }, 0.14, 'linear', ({ z }) => {
+        this.human.rotation.z = z
+      })
+      animation(this.human.rotation, { z: this.human.rotation.z - 2 * Math.PI }, 0.18, 'linear', ({ z }) => {
+        this.human.rotation.z = z
+      }, 0.14)
+      animation(this.head.position, {
+        y: this.head.position.y + 0.9 * scale,
+        x: this.head.position.x + 0.45 * scale }, 0.1, 'linear', ({ x, y, z }) => {
+        this.head.position.set(x, y, z)
+      })
+      animation(this.head.position, {
+        y: this.head.position.y - 0.9 * scale,
+        x: this.head.position.x - 0.45 * scale }, 0.1, 'linear', ({ x, y, z }) => {
+        this.head.position.set(x, y, z)
+      }, 0.1)
+      animation(this.head.position, { y: 7.56, x: 0 }, 0.15, 'linear', ({ x, y, z }) => {
+        this.head.position.set(x, y, z)
+      }, 0.25)
+      animation(this.body.scale, {
+        y: Math.max(scale, 1),
+        x: Math.max(Math.min(1 / scale, 1), 0.7),
+        z: Math.max(Math.min(1 / scale, 1), 0.7) }, 0.1, 'linear', ({ x, y, z }) => {
+        this.body.scale.set(x, y, z)
+      })
+      animation(this.body.scale, {
+        y: Math.min(0.9 / scale, 0.7),
+        x: Math.max(scale, 1.2),
+        z: Math.max(scale, 1.2) }, 0.1, 'linear', ({ x, y, z }) => {
+        this.body.scale.set(x, y, z)
+      }, 0.1)
+      animation(this.body.scale, { y: 1, x: 1, z: 1 }, 0.3, 'linear', ({ x, y, z }) => {
+        this.body.scale.set(x, y, z)
+      }, 0.2)
+    } else if (this.direction === 1) { // z
+    }
   }
 }
 

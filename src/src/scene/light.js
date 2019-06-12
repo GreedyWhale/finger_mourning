@@ -1,5 +1,3 @@
-/* global GameGlobal */
-
 class Light {
   constructor () {
     this.instance = null
