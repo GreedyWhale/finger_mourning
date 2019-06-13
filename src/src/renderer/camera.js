@@ -1,6 +1,8 @@
+import cameraConfig from '../../configs/camera_config'
+
 const camera = () => {
   const ratio = window.innerHeight / window.innerWidth
-  const size = 30
+  const { size } = cameraConfig
   // 设置相机可看到范围
   const cameraInstance = new THREE.OrthographicCamera(
     -size, size, size * ratio, -size * ratio, -100, 85

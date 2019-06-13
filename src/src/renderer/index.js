@@ -1,5 +1,6 @@
 import camera from './camera'
 import scene from './scene'
+import background from '../objects/background'
 
 class Renderer {
   constructor () {
@@ -18,6 +19,9 @@ class Renderer {
       canvas,
       antialias: true
     })
+    this.instance.shadowMap.enabled = true
+    this.scene.add(this.camera)
+    this.camera.add(background())
   }
 
   render () {

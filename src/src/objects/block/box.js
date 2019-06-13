@@ -11,11 +11,13 @@ class Box extends Base {
   }
   create () {
     const geometry = new THREE.BoxGeometry(this.width, this.height, this.width)
-    const material = new THREE.MeshBasicMaterial({
+    const material = new THREE.MeshPhongMaterial({
       color: 0xffffff
     })
     this.instance = new THREE.Mesh(geometry, material)
     this.instance.position.set(this.x, this.y, this.z)
+    this.instance.castShadow = true
+    this.instance.receiveShadow = true
   }
 }
 
