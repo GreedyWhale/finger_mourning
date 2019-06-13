@@ -8,7 +8,9 @@
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
         "wx": true,
-        "GameGlobal": true
+        "GameGlobal": true,
+        "THREE": true,
+        "canvas": true
     },
     "parserOptions": {
         "ecmaVersion": 2018,

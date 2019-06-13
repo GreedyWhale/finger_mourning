@@ -1,7 +1,6 @@
 import './libs/weapp-adapter'
 import * as THREE from './libs/three'
-import Main from './src/main'
+import controller from './src/game/controller'
 
 GameGlobal.THREE = THREE
-
-Main.init()
+controller.initPages()
