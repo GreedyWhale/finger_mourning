@@ -13,6 +13,7 @@ export default class GamePage {
     this.renderer.init()
     this.addBlock()
     this.addPiece()
+    this.bindTouchEvent()
     this.render()
   }
   addBlock () {
@@ -24,10 +25,16 @@ export default class GamePage {
   addPiece () {
     this.piece.init()
     this.renderer.scene.add(this.piece.pieceContainer)
+    this.piece.comeDown()
   }
   render () {
     this.piece && this.piece.update()
     this.renderer.render()
     requestAnimationFrame(() => { this.render() })
+  }
+  bindTouchEvent () {
+    wx.onTouchEnd(() => {
+      this.piece.rotate()
+    })
   }
 }
