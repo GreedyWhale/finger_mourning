@@ -33,6 +33,9 @@ export default class GamePage {
     requestAnimationFrame(() => { this.render() })
   }
   bindTouchEvent () {
+    wx.onTouchStart(() => {
+      this.piece.setStatus('shrink')
+    })
     wx.onTouchEnd(() => {
       this.piece.rotate()
     })

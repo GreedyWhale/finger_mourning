@@ -8,7 +8,7 @@ const camera = () => {
     -size, size, size * ratio, -size * ratio, -100, 85
   )
 
-  cameraInstance.position.set(-10, 10, 10) // 设置相机位置
+  cameraInstance.position.set(0, 0, 0) // 设置相机位置
   cameraInstance.up.set(0, 1, 0)
   cameraInstance.lookAt(new THREE.Vector3(0, 0, 0)) // 设置相机位置从0, 0, 0望向0, 0, 0
 
