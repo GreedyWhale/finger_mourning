@@ -41,4 +41,17 @@ export default class BaseBlock {
       this.instance.position.y = y
     })
   }
+
+  getVertices () {
+    const vertices = []
+    const centerPosition = {
+      x: this.instance.position.x,
+      z: this.instance.position.z
+    }
+    vertices.push([centerPosition.x + this.width / 2, centerPosition.z + this.width / 2])
+    vertices.push([centerPosition.x + this.width / 2, centerPosition.z - this.width / 2])
+    vertices.push([centerPosition.x - this.width / 2, centerPosition.z - this.width / 2])
+    vertices.push([centerPosition.x - this.width / 2, centerPosition.z + this.width / 2])
+    return vertices
+  }
 }

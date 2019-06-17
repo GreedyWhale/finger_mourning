@@ -18,6 +18,7 @@ class Box extends Base {
     this.instance.position.set(this.x, this.y, this.z)
     this.instance.castShadow = true
     this.instance.receiveShadow = true
+    this.instance.name = 'block'
   }
 }
 

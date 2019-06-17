@@ -2,6 +2,8 @@ import { initCoordinates } from '../../configs/coordinate_config'
 import animation from '../utils/animation'
 import blockConfig from '../../configs/block_config'
 import gameConfig from '../../configs/game_config'
+import eventBus from '../utils/event'
+import { GAME_PAGE_CAN_TOUCH } from '../utils/constant'
 class Piece {
   constructor () {
     this.radius = 2.1168
@@ -98,7 +100,10 @@ class Piece {
       y: initCoordinates.y + blockConfig.height / 2,
       z: initCoordinates.z
     }, 1, 'bounceEaseOut', ({ x, y, z }, done) => {
-      if (done) { return }
+      if (done) {
+        eventBus.trigger(GAME_PAGE_CAN_TOUCH, false)
+        return
+      }
       this.pieceContainer.position.set(x, y, z)
     })
   }
@@ -221,15 +226,21 @@ class Piece {
   }
   jump (tickTime) {
     const t = tickTime / 1000
-    this.flyingTime = this.flyingTime + t
     const translateH = this.velocity.vx * t
     const translateY = this.velocity.vy * t - 0.5 * gameConfig.gravity * t * t - gameConfig.gravity * this.flyingTime * t
     this.pieceContainer.translateY(translateY)
     this.pieceContainer.translateOnAxis(this.axis, translateH)
+    this.flyingTime = this.flyingTime + t
   }
   setDirection (direction, axis) {
     this.direction = direction
     this.axis = axis
+  }
+  reset () {
+    this.stop()
+    this.pieceContainer.rotation.x = 0
+    this.pieceContainer.rotation.z = 0
+    this.pieceContainer.position.set(initCoordinates.x, initCoordinates.y + 40, initCoordinates.z)
   }
 }
 
