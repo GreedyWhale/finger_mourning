@@ -1,6 +1,7 @@
 import { initCoordinates } from '../../configs/coordinate_config'
 import animation from '../utils/animation'
 import blockConfig from '../../configs/block_config'
+import gameConfig from '../../configs/game_config'
 class Piece {
   constructor () {
     this.radius = 2.1168
@@ -12,6 +13,13 @@ class Piece {
     this.color = 0xff0000
     this.direction = 'x'
     this.scale = 1
+    this.velocity = {
+      vx: 0, // 水平方向速度
+      vy: 0 // 竖直方向速度
+    }
+    this.flyingTime = 0
+    this.lastFrameTime = 0
+    this.axis = null
   }
   init () {
     this.pieceContainer = new THREE.Object3D()
@@ -77,7 +85,11 @@ class Piece {
     this.head.rotation.y += 0.06
     if (this.status === 'shrink') {
       this.shrink()
+    } else if (this.status === 'jump') {
+      const tickTime = Date.now() - this.lastFrameTime
+      this.jump(tickTime)
     }
+    this.lastFrameTime = Date.now()
   }
 
   comeDown () {
@@ -186,6 +198,7 @@ class Piece {
   }
   stop () {
     this.status = 'stop'
+    this.flyingTime = 0
     this.scale = 1
   }
   shrink () {
@@ -205,6 +218,18 @@ class Piece {
     const bottleDeltaY = HEAD_DELTA / 2
     const deltaY = blockConfig.height * DELTA_SCALE / 2
     this.pieceContainer.position.y -= (bottleDeltaY + deltaY * 2)
+  }
+  jump (tickTime) {
+    const t = tickTime / 1000
+    this.flyingTime = this.flyingTime + t
+    const translateH = this.velocity.vx * t
+    const translateY = this.velocity.vy * t - 0.5 * gameConfig.gravity * t * t - gameConfig.gravity * this.flyingTime * t
+    this.pieceContainer.translateY(translateY)
+    this.pieceContainer.translateOnAxis(this.axis, translateH)
+  }
+  setDirection (direction, axis) {
+    this.direction = direction
+    this.axis = axis
   }
 }
 
