@@ -8,6 +8,7 @@ export default class GamePage {
   constructor () {
     this.piece = piece
     this.renderer = renderer
+    this.currentBlock = null
   }
   init () {
     this.renderer.init()
@@ -19,6 +20,7 @@ export default class GamePage {
   addBlock () {
     const box = new Box(initCoordinates.x, initCoordinates.y, initCoordinates.z)
     const cylinder = new Cylinder(20, 0, 0)
+    this.currentBlock = box
     this.renderer.scene.add(box.instance)
     this.renderer.scene.add(cylinder.instance)
   }
@@ -29,15 +31,19 @@ export default class GamePage {
   }
   render () {
     this.piece && this.piece.update()
+    this.currentBlock && this.currentBlock.update()
     this.renderer.render()
     requestAnimationFrame(() => { this.render() })
   }
   bindTouchEvent () {
     wx.onTouchStart(() => {
       this.piece.setStatus('shrink')
+      this.currentBlock.setStatus('shrink')
     })
     wx.onTouchEnd(() => {
+      this.piece.stop()
       this.piece.rotate()
+      this.currentBlock.rebound()
     })
   }
 }
