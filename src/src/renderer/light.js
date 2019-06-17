@@ -1,4 +1,4 @@
-import animation from '../utils/animation'
+import { animation } from '../utils/animation'
 
 class Light {
   constructor () {

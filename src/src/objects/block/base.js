@@ -1,5 +1,5 @@
 import blockConfig from '../../../configs/block_config'
-import animation from '../../utils/animation'
+import { animation } from '../../utils/animation'
 
 export default class BaseBlock {
   constructor (type) {

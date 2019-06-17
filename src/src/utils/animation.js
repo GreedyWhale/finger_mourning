@@ -1,5 +1,10 @@
 import tween from './tween'
+
+let animationId = -1
+let stoppedAnimationId = animationId - 1
+
 const doAnimation = (from, to, duration, type = 'linear', callback = () => {}) => {
+  const selfAnimationId = ++animationId
   const intervalReference = 17
   const frames = Math.round((duration * 1000 / intervalReference))
   let { x: currentX = 0, y: currentY = 0, z: currentZ = 0 } = from
@@ -20,10 +25,10 @@ const doAnimation = (from, to, duration, type = 'linear', callback = () => {}) =
       y: tweenFn(currentFrame, currentY, toY - currentY, frames),
       z: tweenFn(currentFrame, currentZ, toZ - currentZ, frames)
     }
-    if (currentFrame <= frames) {
+    if ((currentFrame <= frames) && (selfAnimationId > stoppedAnimationId)) {
       callback(result)
       requestAnimationFrame(step)
-    } else {
+    } else if ((currentFrame > frames) && (selfAnimationId > stoppedAnimationId)) {
       callback(to, 'done')
     }
     lastTime = Date.now()
@@ -31,10 +36,12 @@ const doAnimation = (from, to, duration, type = 'linear', callback = () => {}) =
   step()
 }
 
-const animation = (from, to, duration, type = 'linear', callback = () => {}, delay = 0) => {
+export const animation = (from, to, duration, type = 'linear', callback = () => {}, delay = 0) => {
   setTimeout(() => {
     doAnimation(from, to, duration, type, callback)
   }, delay * 1000)
 }
 
-export default animation
+export const stopAllAnimation = () => {
+  stoppedAnimationId = animationId
+}

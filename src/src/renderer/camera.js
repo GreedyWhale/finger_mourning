@@ -1,5 +1,5 @@
 import cameraConfig from '../../configs/camera_config'
-import animation from '../utils/animation'
+import { animation } from '../utils/animation'
 
 class Camera {
   constructor () {

@@ -10,6 +10,8 @@ import pointInPolygonMethods from '../utils/pointInPolygon'
 import eventBus from '../utils/event'
 import { SET_GAME_STAGE, GAME_PAGE_CAN_TOUCH } from '../utils/constant'
 import ScoreText from '../objects/score/index'
+import audioManager from '../modules/audioManager'
+import { stopAllAnimation } from '../utils/animation'
 
 const HIT_NEXT_BLOCK_CENTER = 1
 const HIT_CURRENT_BLOCK = 2
@@ -27,9 +29,9 @@ export default class GamePage {
     this.disabled = true
     this.targetPosition = {}
     this.axis = null
-    this.visible = true
     this.scoreText = null
     this.score = 0
+    this.combo = 0
     this.initListeners()
   }
   init () {
@@ -77,6 +79,7 @@ export default class GamePage {
       this.touchStartTime = Date.now()
       this.piece.setStatus('shrink')
       this.currentBlock.setStatus('shrink')
+      audioManager.shrink.play()
     })
     wx.onTouchEnd(() => {
       if (this.disabled || !this.touchStartTime) { return }
@@ -93,6 +96,8 @@ export default class GamePage {
       this.piece.rotate()
       this.currentBlock.rebound()
       this.piece.setStatus('jump')
+      audioManager.shrink.stop()
+      audioManager.shrink_end.stop()
     })
   }
   setDirection (direction) {
@@ -157,11 +162,54 @@ export default class GamePage {
         this.piece.pieceContainer.position.x = this.piece.destination[0]
         this.piece.pieceContainer.position.z = this.piece.destination[1]
         if (this.hit === HIT_NEXT_BLOCK_CENTER || this.hit === HIT_NEXT_BLOCK_NORMAL) {
+          if (this.hit === HIT_NEXT_BLOCK_CENTER) {
+            this.combo++
+            audioManager['combo' + (this.combo <= 8 ? this.combo : '8')].play()
+            this.score += 2 * this.combo
+            this.updateScore(this.score)
+          } else if (this.hit === HIT_NEXT_BLOCK_NORMAL) {
+            this.combo = 0
+            audioManager.success.play()
+            this.updateScore(++this.score)
+          }
           this.updateNextBlock()
         }
-        this.updateScore(++this.score)
       } else { // game over
-        eventBus.trigger(SET_GAME_STAGE, 'gameOver')
+        this.combo = 0
+        this.checkingHit = false
+        this.disabled = true
+        console.log(1)
+        if (this.hit === GAME_OVER_NEXT_BLOCK_BACK || this.hit === GAME_OVER_CURRENT_BLOCK_BACK) {
+          stopAllAnimation()
+          this.piece.stop()
+          this.piece.forerake()
+          audioManager.fall_from_block.play()
+          this.piece.pieceContainer.position.y = blockConfig.height / 2
+          setTimeout(() => {
+            // this.uploadScore()
+            eventBus.trigger(SET_GAME_STAGE, 'gameOver')
+          }, 1500)
+        } else if (this.hit === GAME_OVER_NEXT_BLOCK_FRONT) {
+          stopAllAnimation()
+          this.piece.stop()
+          this.piece.hypsokinesis()
+          audioManager.fall_from_block.play()
+          this.piece.pieceContainer.position.y = blockConfig.height / 2
+          setTimeout(() => {
+            // this.uploadScore()
+            eventBus.trigger(SET_GAME_STAGE, 'gameOver')
+          }, 1500)
+        } else {
+          stopAllAnimation()
+          this.piece.stop()
+          this.piece.straight()
+          audioManager.fall.play()
+          this.piece.pieceContainer.position.y = blockConfig.height / 2
+          setTimeout(() => {
+            // this.uploadScore()
+            eventBus.trigger(SET_GAME_STAGE, 'gameOver')
+          }, 1500)
+        }
       }
     }
   }

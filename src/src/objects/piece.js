@@ -1,9 +1,10 @@
 import { initCoordinates } from '../../configs/coordinate_config'
-import animation from '../utils/animation'
+import { animation } from '../utils/animation'
 import blockConfig from '../../configs/block_config'
 import gameConfig from '../../configs/game_config'
 import eventBus from '../utils/event'
 import { GAME_PAGE_CAN_TOUCH } from '../utils/constant'
+import audioManager from '../modules/audioManager'
 class Piece {
   constructor () {
     this.radius = 2.1168
@@ -95,6 +96,7 @@ class Piece {
   }
 
   comeDown () {
+    audioManager.init.play()
     animation(this.pieceContainer.position, {
       x: initCoordinates.x,
       y: initCoordinates.y + blockConfig.height / 2,
@@ -241,6 +243,85 @@ class Piece {
     this.pieceContainer.rotation.x = 0
     this.pieceContainer.rotation.z = 0
     this.pieceContainer.position.set(initCoordinates.x, initCoordinates.y + 40, initCoordinates.z)
+  }
+  forerake () {
+    this.status = 'forerake'
+    setTimeout(() => {
+      if (this.direction === 'x') { // x
+        animation(this.pieceContainer.rotation, {
+          z: -Math.PI / 2
+        }, 1, 'linear', ({ z }, done) => {
+          if (done) { return }
+          this.pieceContainer.rotation.z = z
+        })
+      } else {
+        animation(this.pieceContainer.rotation, {
+          x: -Math.PI / 2
+        }, 1, 'linear', ({ x }, done) => {
+          if (done) { return }
+          this.pieceContainer.rotation.x = x
+        })
+      }
+      setTimeout(() => {
+        animation(this.pieceContainer.position, {
+          y: -blockConfig.height / 2 + 1.2
+        }, 0.4, 'linear', ({ y }, done) => {
+          if (done) { return }
+          this.pieceContainer.position.y = y
+        })
+      }, 350)
+    }, 200)
+  }
+  hypsokinesis () {
+    this.status = 'hypsokinesis'
+    setTimeout(() => {
+      if (this.direction === 'x') {
+        animation(this.pieceContainer.rotation, {
+          z: Math.PI / 2
+        }, 0.8, 'linear', ({ z }, done) => {
+          if (done) { return }
+          this.pieceContainer.rotation.z = z
+        })
+      } else {
+        animation(this.pieceContainer.rotation, {
+          x: Math.PI / 2
+        }, 0.8, 'linear', ({ x }, done) => {
+          if (done) { return }
+          this.pieceContainer.rotation.x = x
+        })
+      }
+      setTimeout(() => {
+        animation(this.pieceContainer.position, {
+          y: -blockConfig.height / 2 + 1.2
+        }, 0.4, 'linear', ({ y }, done) => {
+          if (done) { return }
+          this.pieceContainer.position.y = y
+        })
+        animation(this.head.position, {
+          x: 1.125
+        }, 0.2, 'linear', ({ x }, done) => {
+          if (done) { return }
+          this.head.position.x = x
+        })
+        animation(this.head.position, {
+          x: 0
+        }, 0.2, 'linear', ({ x }, done) => {
+          if (done) { return }
+          this.head.position.x = x
+        }, 0.2)
+      }, 350)
+    }, 200)
+  }
+  straight () {
+    this.status = 'straight'
+    setTimeout(() => {
+      animation(this.pieceContainer.position, {
+        y: -blockConfig.height / 2 + 1.2
+      }, 0.4, 'linear', ({ y }, done) => {
+        if (done) { return }
+        this.pieceContainer.position.y = y
+      })
+    })
   }
 }
 
