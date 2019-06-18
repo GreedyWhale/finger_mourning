@@ -35,6 +35,7 @@ export default class GameOverPage {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
     this.texture = new THREE.Texture(this.canvas)
+    this.texture.minFilter = THREE.LinearFilter
     this.material = new THREE.MeshBasicMaterial({ map: this.texture, transparent: true })
     this.geometry = new THREE.PlaneGeometry(cameraConfig.size * 2, aspect * cameraConfig.size * 2)
     this.instance = new THREE.Mesh(this.geometry, this.material)

@@ -7,6 +7,15 @@ export default class BaseBlock {
     this.height = blockConfig.height
     this.width = blockConfig.width
     this.scale = 1
+    this.colors = [
+      0xFFB6C1, 0xDC143C,
+      0xBA55D3, 0x8A2BE2,
+      0x000080, 0x1E90FF,
+      0x008080, 0x40E0D0,
+      0x3CB371, 0x32CD32,
+      0xFFFF00, 0xFFD700,
+      0xFFA500, 0xFF4500
+    ]
   }
   update () {
     if (this.status === 'shrink') {
@@ -53,5 +62,14 @@ export default class BaseBlock {
     vertices.push([centerPosition.x - this.width / 2, centerPosition.z - this.width / 2])
     vertices.push([centerPosition.x - this.width / 2, centerPosition.z + this.width / 2])
     return vertices
+  }
+
+  randomColors () {
+    let first = Math.floor(Math.random() * this.colors.length)
+    let second = Math.floor(Math.random() * this.colors.length)
+    while (second === first) {
+      second = Math.floor(Math.random() * this.colors.length)
+    }
+    return [this.colors[first], this.colors[second]]
   }
 }

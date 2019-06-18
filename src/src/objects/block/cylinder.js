@@ -9,16 +9,32 @@ export default class Cylinder extends Base {
     this.create()
   }
   create () {
-    const geometry = new THREE.CylinderGeometry(
-      this.width / 2, this.width / 2, this.height, 120
-    )
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xffffff
-    })
-    this.instance = new THREE.Mesh(geometry, material)
-    this.instance.position.set(this.x, this.y, this.z)
-    this.instance.castShadow = true
-    this.instance.receiveShadow = true
+    const colors = this.randomColors()
+    const innerMaterial = new THREE.MeshLambertMaterial({ color: colors[0] })
+    const outerMaterial = new THREE.MeshLambertMaterial({ color: colors[1] })
+
+    const innerHeight = 3
+    const outerHeight = (this.height - innerHeight) / 2
+    const outerGeometry = new THREE.CylinderGeometry(this.width / 2, this.width / 2, outerHeight, 120)
+    const innerGeometry = new THREE.CylinderGeometry(this.width / 2, this.width / 2, innerHeight, 120)
+
+    const totalMesh = new THREE.Object3D()
+    const topMesh = new THREE.Mesh(outerGeometry, outerMaterial)
+    topMesh.position.y = (innerHeight + outerHeight) / 2
+    topMesh.receiveShadow = true
+    topMesh.castShadow = true
+    const middleMesh = new THREE.Mesh(innerGeometry, innerMaterial)
+    middleMesh.receiveShadow = true
+    middleMesh.castShadow = true
+    const bottomMesh = new THREE.Mesh(outerGeometry, outerMaterial)
+    bottomMesh.position.y = -(innerHeight + outerHeight) / 2
+    bottomMesh.receiveShadow = true
+    bottomMesh.castShadow = true
+    totalMesh.add(topMesh)
+    totalMesh.add(middleMesh)
+    totalMesh.add(bottomMesh)
+    this.instance = totalMesh
     this.instance.name = 'block'
+    this.instance.position.set(this.x, this.y, this.z)
   }
 }

@@ -178,7 +178,6 @@ export default class GamePage {
         this.combo = 0
         this.checkingHit = false
         this.disabled = true
-        console.log(1)
         if (this.hit === GAME_OVER_NEXT_BLOCK_BACK || this.hit === GAME_OVER_CURRENT_BLOCK_BACK) {
           stopAllAnimation()
           this.piece.stop()

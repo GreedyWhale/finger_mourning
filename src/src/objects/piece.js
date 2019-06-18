@@ -13,7 +13,7 @@ class Piece {
     this.body = null
     this.parent = null
     this.wrapper = null
-    this.color = 0xff0000
+    this.color = 0xe4007c
     this.direction = 'x'
     this.scale = 1
     this.velocity = {
