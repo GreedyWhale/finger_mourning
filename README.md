@@ -27,3 +27,12 @@
 - 通用功能的封装，比如：动画
 - 游戏整体采用MVC的架构模式进行管理和控制
 - 基本实现微信跳一跳小游戏的玩法
+
+### 游戏效果
+
+![1](https://github.com/GreedyWhale/finger_mourning/blob/master/sample_pictures/example.gif)
+![2](https://github.com/GreedyWhale/finger_mourning/blob/master/sample_pictures/WX20190618-134915%402x.png)
+![3](https://github.com/GreedyWhale/finger_mourning/blob/master/sample_pictures/WX20190618-134926%402x.png)
+![4](https://github.com/GreedyWhale/finger_mourning/blob/master/sample_pictures/WX20190618-135022%402x.png)
+![5](https://github.com/GreedyWhale/finger_mourning/blob/master/sample_pictures/WX20190618-135042%402x.png)
+![6](https://github.com/GreedyWhale/finger_mourning/blob/master/sample_pictures/WX20190618-135052%402x.png)
